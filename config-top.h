@@ -66,7 +66,7 @@
 /* The default value of the PATH variable. */
 #ifndef DEFAULT_PATH_VALUE
 #define DEFAULT_PATH_VALUE \
-   CUSTOM_PREFIX_PATH##"/bin:/system/bin:/system/xbin:/system_ext/bin:/system_ext/xbin:/product/bin:/vendor/bin:/vendor/xbin:/sbin:/bin."
+   CUSTOM_PREFIX_PATH "/bin:/system/bin:/system/xbin:/system_ext/bin:/system_ext/xbin:/product/bin:/vendor/bin:/vendor/xbin:/sbin:/bin."
 #endif
 
 /* If you want to unconditionally set a value for PATH in every restricted
@@ -77,13 +77,13 @@
    the Posix.2 confstr () function, or CS_PATH define are not present. */
 #ifndef STANDARD_UTILS_PATH
 #define STANDARD_UTILS_PATH \
-   CUSTOM_PREFIX_PATH##"/bin:/system/bin:/system/xbin:/system_ext/bin:/system_ext/xbin:/product/bin:/vendor/bin:/vendor/xbin:/sbin:/bin:/system/etc:/system_ext/etc:/product/etc:/vendor/etc:/etc"
+   CUSTOM_PREFIX_PATH "/bin:/system/bin:/system/xbin:/system_ext/bin:/system_ext/xbin:/product/bin:/vendor/bin:/vendor/xbin:/sbin:/bin:/system/etc:/system_ext/etc:/product/etc:/vendor/etc:/etc"
 #endif
 
 /* The default path for enable -f */
 #ifndef DEFAULT_LOADABLE_BUILTINS_PATH
 #define DEFAULT_LOADABLE_BUILTINS_PATH \
-   CUSTOM_PREFIX_PATH##"/lib/bash:/system/lib/bash:/system_ext/lib/bash:/product/lib/bash:/vendor/lib/bash:."
+   CUSTOM_PREFIX_PATH "/lib/bash:/system/lib/bash:/system_ext/lib/bash:/product/lib/bash:/vendor/lib/bash:."
 #endif
 
 /* Default primary and secondary prompt strings. */
