@@ -72,26 +72,6 @@ fi
 # 创建目录
 mkdir -p "$OUTPUT_DIR" "$LOG_DIR"
 
-TPARAM_FILE="lib/termcap/tparam.c"
-
-# 添加补丁
-add_patches() {
-    if ! grep -q "#include <unistd.h>" "$TPARAM_FILE"; then
-        if [ -f "$TPARAM_FILE" ]; then
-            cp "$TPARAM_FILE" "$TPARAM_FILE.bak"
-        fi
-        sed -i '1i#include <unistd.h>' "$TPARAM_FILE"
-        echo "Added unistd.h to $TPARAM_FILE"
-    fi
-}
-
-# 恢复原始文件
-restore_patches() {
-    if [ -f "$TPARAM_FILE.bak" ]; then
-        mv "$TPARAM_FILE.bak" "$TPARAM_FILE"
-        echo "Restored original $TPARAM_FILE"
-    fi
-}
 
 # 构建函数
 build_for_abi() {
@@ -156,13 +136,10 @@ build_for_abi() {
 }
 
 # 主构建过程
-add_patches
 
 for ABI in "${ABIS[@]}"; do
     build_for_abi "$ABI"
 done
-
-restore_patches
 
 echo
 echo "All builds completed successfully!"

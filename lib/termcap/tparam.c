@@ -19,6 +19,10 @@
 */
 
 /* Emacs config.h may rename various library functions such as malloc.  */
+
+// for android
+#include <unistd.h>
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 
