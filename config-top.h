@@ -18,6 +18,9 @@
    along with Bash.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define CUSTOM_PREFIX_PATH \
+   "/data/local/tmp/runner/usr"
+
 /* Define CONTINUE_AFTER_KILL_ERROR if you want the kill command to
    continue processing arguments after one of them fails.  This is
    what POSIX.2 specifies. */
@@ -63,7 +66,7 @@
 /* The default value of the PATH variable. */
 #ifndef DEFAULT_PATH_VALUE
 #define DEFAULT_PATH_VALUE \
-  "/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:."
+   CUSTOM_PREFIX_PATH##"/bin:/system/bin:/system/xbin:/system_ext/bin:/system_ext/xbin:/product/bin:/vendor/bin:/vendor/xbin:/sbin:/bin."
 #endif
 
 /* If you want to unconditionally set a value for PATH in every restricted
@@ -74,13 +77,13 @@
    the Posix.2 confstr () function, or CS_PATH define are not present. */
 #ifndef STANDARD_UTILS_PATH
 #define STANDARD_UTILS_PATH \
-  "/bin:/usr/bin:/sbin:/usr/sbin:/etc:/usr/etc"
+   CUSTOM_PREFIX_PATH##"/bin:/system/bin:/system/xbin:/system_ext/bin:/system_ext/xbin:/product/bin:/vendor/bin:/vendor/xbin:/sbin:/bin:/system/etc:/system_ext/etc:/product/etc:/vendor/etc:/etc"
 #endif
 
 /* The default path for enable -f */
 #ifndef DEFAULT_LOADABLE_BUILTINS_PATH
 #define DEFAULT_LOADABLE_BUILTINS_PATH \
-  "/usr/local/lib/bash:/usr/lib/bash:/opt/local/lib/bash:/usr/pkg/lib/bash:/opt/pkg/lib/bash:."
+   CUSTOM_PREFIX_PATH##"/lib/bash:/system/lib/bash:/system_ext/lib/bash:/product/lib/bash:/vendor/lib/bash:."
 #endif
 
 /* Default primary and secondary prompt strings. */
@@ -126,16 +129,16 @@
 /* Define if you want each line saved to the history list in bashhist.c:
    bash_add_history() to be sent to syslog(). */
 /* #define SYSLOG_HISTORY */
-#if defined (SYSLOG_HISTORY)
-#  define SYSLOG_FACILITY LOG_USER
-#  define SYSLOG_LEVEL LOG_INFO
-#  define OPENLOG_OPTS LOG_PID
+#if defined(SYSLOG_HISTORY)
+#define SYSLOG_FACILITY LOG_USER
+#define SYSLOG_LEVEL LOG_INFO
+#define OPENLOG_OPTS LOG_PID
 #endif
 
 /* Define if you want syslogging history to be controllable at runtime via a
    shell option; if defined, the value is the default for the syslog_history
    shopt option */
-#if defined (SYSLOG_HISTORY)
+#if defined(SYSLOG_HISTORY)
 /* #define SYSLOG_SHOPT 1 */
 #endif
 
@@ -145,17 +148,17 @@
 /* Define as 1 if you want to enable code that implements multiple coprocs
    executing simultaneously */
 #ifndef MULTIPLE_COPROCS
-#  define MULTIPLE_COPROCS 0
+#define MULTIPLE_COPROCS 0
 #endif
 
 /* Define to 0 if you want the checkwinsize option off by default, 1 if you
    want it on. */
-#define CHECKWINSIZE_DEFAULT	1
+#define CHECKWINSIZE_DEFAULT 1
 
 /* Define to 1 if you want to optimize for sequential array assignment when
    using indexed arrays, 0 if you want bash-4.2 behavior, which favors
    random access but is O(N) for each array assignment. */
-#define OPTIMIZE_SEQUENTIAL_ARRAY_ASSIGNMENT	1
+#define OPTIMIZE_SEQUENTIAL_ARRAY_ASSIGNMENT 1
 
 /* Define to 1 if you want to be able to export indexed arrays to processes
    using the foo=([0]=one [1]=two) and so on */
@@ -194,7 +197,7 @@
 /* Define to 0 if you want history expansion to be disabled by default in
    interactive shells; define to 1 for the historical behavior of enabling
    when the shell is interactive. */
-#define HISTEXPAND_DEFAULT	1
+#define HISTEXPAND_DEFAULT 1
 
 /* Undefine or define to 0 if you don't want to allow associative array
    assignment using a compound list of key-value pairs. */
