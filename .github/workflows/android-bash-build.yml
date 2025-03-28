@@ -11,6 +11,7 @@ env:
   API_LEVEL: 28
   NDK_VERSION: "27.2.12479018"
   ANDROID_BUILD_DIR: "${{ github.workspace }}/android_build"
+  NDK_INSTALL_DIR: "${{ github.workspace }}/android-ndk"  # 修改安装目录到工作空间
 
 jobs:
   build:
@@ -22,10 +23,22 @@ jobs:
     - name: Setup Android NDK
       run: |
         NDK_ZIP="android-ndk-r27b-linux.zip"
-        wget -q https://dl.google.com/android/repository/${NDK_ZIP}
-        unzip -q ${NDK_ZIP} -d /usr/local/lib
-        echo "NDK_HOME=/usr/local/lib/android-ndk-r27b" >> $GITHUB_ENV
-        echo "ANDROID_NDK=/usr/local/lib/android-ndk-r27b" >> $GITHUB_ENV
+        # 下载到工作空间目录
+        wget -q https://dl.google.com/android/repository/${NDK_ZIP} -P "${{ env.NDK_INSTALL_DIR }}"
+        # 创建目标目录并解压
+        mkdir -p "${{ env.NDK_INSTALL_DIR }}"
+        unzip -q "${{ env.NDK_INSTALL_DIR }}/${NDK_ZIP}" -d "${{ env.NDK_INSTALL_DIR }}"
+        # 设置环境变量
+        echo "NDK_HOME=${{ env.NDK_INSTALL_DIR }}/android-ndk-r27b" >> $GITHUB_ENV
+
+    - name: Verify NDK installation
+      run: |
+        if [ ! -d "$NDK_HOME" ]; then
+          echo "❌ NDK installation failed!"
+          ls -la "${{ env.NDK_INSTALL_DIR }}"
+          exit 1
+        fi
+        echo "NDK path verified: $NDK_HOME"
 
     - name: Set up build environment
       run: |
@@ -42,7 +55,7 @@ jobs:
           API_LEVEL=${{ env.API_LEVEL }} \
           OUTPUT_DIR="${{ env.ANDROID_BUILD_DIR }}/outputs" \
           LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
-          $PWD/build_for_android.sh
+          ./build_for_android.sh
         done
 
     - name: Package artifacts
@@ -60,3 +73,4 @@ jobs:
       if: always()
       run: |
         rm -rf ${{ env.ANDROID_BUILD_DIR }}/*
+        rm -rf "${{ env.NDK_INSTALL_DIR }}"
