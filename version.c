@@ -90,5 +90,9 @@ show_shell_version (extended)
       printf ("%s\n", _(bash_license));
       printf ("%s\n", _("This is free software; you are free to change and redistribute it."));
       printf ("%s\n", _("There is NO WARRANTY, to the extent permitted by law."));
+
+      printf ("\n");
+      printf ("Modified by %s <%s>\n", "yangFenTuoZi" "yango0@outlook.com>");
+      printf ("Source code: %s\n", "https://github.com/yangFenTuoZi/bash-on-runner");
     }
 }
