@@ -42,7 +42,7 @@ jobs:
           API_LEVEL=${{ env.API_LEVEL }} \
           OUTPUT_DIR="${{ env.ANDROID_BUILD_DIR }}/outputs" \
           LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
-          ./build_for_android.sh
+          $PWD/build_for_android.sh
         done
 
     - name: Package artifacts
