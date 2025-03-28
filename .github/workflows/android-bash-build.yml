@@ -51,7 +51,7 @@ jobs:
         tar -czvf android_build-v${{ env.API_LEVEL }}.tar.gz *
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: android_build-ndk${{ env.NDK_VERSION }}-api${{ env.API_LEVEL }}
         path: ${{ env.ANDROID_BUILD_DIR }}/android_build-v${{ env.API_LEVEL }}.tar.gz
