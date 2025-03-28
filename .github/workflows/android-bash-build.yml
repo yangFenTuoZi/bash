@@ -1,0 +1,62 @@
+name: Android Bash Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  API_LEVEL: 28
+  NDK_VERSION: "27.2.12479018"
+  ANDROID_BUILD_DIR: "${{ github.workspace }}/android_build"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Android NDK
+      run: |
+        NDK_ZIP="android-ndk-r27b-linux.zip"
+        wget -q https://dl.google.com/android/repository/${NDK_ZIP}
+        unzip -q ${NDK_ZIP} -d /usr/local/lib
+        echo "NDK_HOME=/usr/local/lib/android-ndk-r27b" >> $GITHUB_ENV
+        echo "ANDROID_NDK=/usr/local/lib/android-ndk-r27b" >> $GITHUB_ENV
+
+    - name: Set up build environment
+      run: |
+        mkdir -p ${{ env.ANDROID_BUILD_DIR }}/{logs,outputs}
+        chmod +x build_for_android.sh
+
+    - name: Build all ABIs
+      env:
+        ABIS: "arm64-v8a armeabi-v7a x86_64 x86"
+      run: |
+        for ABI in $ABIS; do
+          echo "▶️ Building $ABI..."
+          NDK_HOME=${{ env.NDK_HOME }} \
+          API_LEVEL=${{ env.API_LEVEL }} \
+          OUTPUT_DIR="${{ env.ANDROID_BUILD_DIR }}/outputs" \
+          LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
+          ./build_for_android.sh
+        done
+
+    - name: Package artifacts
+      run: |
+        cd ${{ env.ANDROID_BUILD_DIR }}
+        tar -czvf android_build-v${{ env.API_LEVEL }}.tar.gz *
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: android_build-ndk${{ env.NDK_VERSION }}-api${{ env.API_LEVEL }}
+        path: ${{ env.ANDROID_BUILD_DIR }}/android_build-v${{ env.API_LEVEL }}.tar.gz
+
+    - name: Clean workspace
+      if: always()
+      run: |
+        rm -rf ${{ env.ANDROID_BUILD_DIR }}/*
