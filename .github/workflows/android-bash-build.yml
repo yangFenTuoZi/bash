@@ -49,15 +49,12 @@ jobs:
       env:
         ABIS: "arm64-v8a armeabi-v7a x86_64 x86"
       run: |
-        for ABI in $ABIS; do
-          echo "▶️ Building $ABI..."
-          NDK_HOME=${{ env.NDK_HOME }} \
-          API_LEVEL=${{ env.API_LEVEL }} \
-          OUTPUT_DIR="${{ env.ANDROID_BUILD_DIR }}/outputs" \
-          LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
-          ./build_for_android.sh
-        done
-
+        echo "▶️ Building..."
+        NDK_HOME=${{ env.NDK_HOME }} \
+        API_LEVEL=${{ env.API_LEVEL }} \
+        OUTPUT_DIR="${{ env.ANDROID_BUILD_DIR }}/outputs" \
+        LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
+        ./build_for_android.sh
     - name: Package artifacts
       run: |
         cd ${{ env.ANDROID_BUILD_DIR }}
