@@ -65,15 +65,15 @@ shell_version_string ()
     {
       if (release_status)
 #if HAVE_SNPRINTF
-	snprintf (tt, sizeof (tt), "%s.%d(%d)-%s", dist_version, patch_level, build_version, release_status);
+    snprintf(tt, sizeof(tt), "%s.%d(%d)_mod-%s", dist_version, patch_level, build_version, release_status);
 #else
-	sprintf (tt, "%s.%d(%d)-%s", dist_version, patch_level, build_version, release_status);
+	sprintf (tt, "%s.%d(%d)_mod-%s", dist_version, patch_level, build_version, release_status);
 #endif
       else
 #if HAVE_SNPRINTF
-	snprintf (tt, sizeof (tt), "%s.%d(%d)", dist_version, patch_level, build_version);
+    snprintf(tt, sizeof(tt), "%s.%d(%d)_mod", dist_version, patch_level, build_version);
 #else
-	sprintf (tt, "%s.%d(%d)", dist_version, patch_level, build_version);
+    sprintf(tt, "%s.%d(%d)_mod", dist_version, patch_level, build_version);
 #endif
     }
   return tt;
@@ -92,7 +92,7 @@ show_shell_version (extended)
       printf ("%s\n", _("There is NO WARRANTY, to the extent permitted by law."));
 
       printf ("\n");
-      printf ("Modified by %s <%s>\n", "yangFenTuoZi" "yango0@outlook.com>");
+      printf ("Modified by %s <%s>\n", "yangFenTuoZi", "yango0@outlook.com>");
       printf ("Source code: %s\n", "https://github.com/yangFenTuoZi/bash-on-runner");
     }
 }
