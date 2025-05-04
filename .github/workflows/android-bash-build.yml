@@ -56,11 +56,13 @@ jobs:
         LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
         ./build_for_android.sh
     - name: Package artifacts
+      if: always()
       run: |
         cd ${{ env.ANDROID_BUILD_DIR }}
         tar -czvf android_build-v${{ env.API_LEVEL }}.tar.gz *
 
     - name: Upload artifact
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: android_build-ndk${{ env.NDK_VERSION }}-api${{ env.API_LEVEL }}
