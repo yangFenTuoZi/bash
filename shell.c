@@ -193,9 +193,6 @@ int have_devfd = HAVE_DEV_FD;
 int have_devfd = 0;
 #endif
 
-/* 便于Runner查找进程的标记，在代码中无作用 */
-static char *nice_name = "";
-
 /* The name of the .(shell)rc file. */
 static char *bashrc_file = DEFAULT_BASHRC;
 
@@ -278,7 +275,6 @@ static const struct {
 #if defined (WORDEXP_OPTION)
   { "wordexp", Int, &wordexp_only, (char **)0x0 },
 #endif
-  { "nice-name", Charp, (int *)0x0, &nice_name }
   { (char *)0x0, Int, (int *)0x0, (char **)0x0 }
 };
 
