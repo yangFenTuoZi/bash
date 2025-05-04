@@ -256,8 +256,8 @@ static const struct {
 #endif
   { "help", Int, &want_initial_help, (char **)0x0 },
   { "init-file", Charp, (int *)0x0, &bashrc_file },
-  { "login", Int, &make_login_shell, (char **)0x0 }，
-  { "nice-name", Charp, (int *)0x0, (char **)0x0 }，
+  { "login", Int, &make_login_shell, (char **)0x0 },
+  { "nice-name", Charp, (int *)0x0, (char **)0x0 },
   { "noediting", Int, &no_line_editing, (char **)0x0 },
   { "noprofile", Int, &no_profile, (char **)0x0 },
   { "norc", Int, &no_rc, (char **)0x0 },
