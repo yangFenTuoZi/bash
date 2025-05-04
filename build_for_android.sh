@@ -3,7 +3,7 @@
 set -e
 
 # 默认参数
-DEFAULT_API_LEVEL=28
+DEFAULT_API_LEVEL=24
 DEFAULT_NDK_HOME="$HOME/Android/Sdk/ndk-bundle"
 DEFAULT_OUTPUT_DIR="$(dirname $0)/android_build/outputs"
 DEFAULT_LOG_DIR="$(dirname $0)/android_build/logs"
