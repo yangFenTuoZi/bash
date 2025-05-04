@@ -256,7 +256,8 @@ static const struct {
 #endif
   { "help", Int, &want_initial_help, (char **)0x0 },
   { "init-file", Charp, (int *)0x0, &bashrc_file },
-  { "login", Int, &make_login_shell, (char **)0x0 },
+  { "login", Int, &make_login_shell, (char **)0x0 }，
+  { "nice-name", Charp, (int *)0x0, (char **)0x0 }，
   { "noediting", Int, &no_line_editing, (char **)0x0 },
   { "noprofile", Int, &no_profile, (char **)0x0 },
   { "norc", Int, &no_rc, (char **)0x0 },
@@ -865,6 +866,17 @@ parse_long_options (argv, arg_start, arg_end)
 		{
 		  report_error (_("%s: option requires an argument"), long_args[i].name);
 		  exit (EX_BADUSAGE);
+		}
+	      else if (STREQ(arg_string + 1, "nice-name"))
+		{
+		  // 如果是 --nice-name 参数，只读取其值并忽略
+		  char *nice_name_value = argv[arg_index];
+		  if (nice_name_value == 0)
+		    {
+		      report_error (_("%s: option requires an argument"), "nice-name");
+		      exit (EX_BADUSAGE);
+		    }
+		  arg_index++; // 跳过该参数的值
 		}
 	      else
 		*long_args[i].char_value = argv[arg_index];
