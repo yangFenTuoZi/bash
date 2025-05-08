@@ -20,6 +20,9 @@ ABIS=("arm64-v8a" "armeabi-v7a" "x86_64" "x86")
 # 工具链路径
 TOOLCHAIN="$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64"
 
+# 默认不启用 --no-log-file 参数
+NO_LOG_FILE=false
+
 # 清理函数
 clean() {
     echo "Cleaning build directories..."
@@ -32,8 +35,9 @@ clean() {
 show_help() {
     echo "Usage: $0 [options]"
     echo "Options:"
-    echo "  --clean       Clean build artifacts"
-    echo "  --help        Show this help message"
+    echo "  --clean        Clean build artifacts"
+    echo "  --help         Show this help message"
+    echo "  --no-log-file  Do not log output to file, output to terminal instead"
     echo ""
     echo "Environment variables:"
     echo "  NDK_HOME      Path to Android NDK (default: $DEFAULT_NDK_HOME)"
@@ -52,6 +56,9 @@ while [[ $# -gt 0 ]]; do
         --help)
             show_help
             exit 0
+            ;;
+        --no-log-file)
+            NO_LOG_FILE=true
             ;;
         *)
             echo "Unknown option: $1"
@@ -77,9 +84,11 @@ mkdir -p "$OUTPUT_DIR" "$LOG_DIR"
 build_for_abi() {
     local ABI="$1"
     local LOG_FILE="$LOG_DIR/build_${ABI}.log"
-    
+
     echo "Building for $ABI..."
-    echo "Logging to $LOG_FILE"
+    if [ "$NO_LOG_FILE" = false ]; then
+        echo "Logging to $LOG_FILE"
+    fi
 
     # 设置ABI特定参数
     case "$ABI" in
@@ -117,26 +126,43 @@ build_for_abi() {
     export CFLAGS="-D__ANDROID_API__=$API_LEVEL --sysroot=$SYSROOT"
 
     # 配置
-    ./configure \
-        --prefix="$OUTPUT_DIR/$ABI" \
-        --host="$HOST" \
-        CC="$CC" \
-        AR="$AR" \
-        CFLAGS="$CFLAGS"> "$LOG_FILE" 2>&1
+    if [ "$NO_LOG_FILE" = true ]; then
+        ./configure \
+            --prefix="$OUTPUT_DIR/$ABI" \
+            --host="$HOST" \
+            CC="$CC" \
+            AR="$AR" \
+            CFLAGS="$CFLAGS"
+    else
+        ./configure \
+            --prefix="$OUTPUT_DIR/$ABI" \
+            --host="$HOST" \
+            CC="$CC" \
+            AR="$AR" \
+            CFLAGS="$CFLAGS" > "$LOG_FILE" 2>&1
+    fi
 
     # 编译和安装
-    make >> "$LOG_FILE" 2>&1
-    make install >> "$LOG_FILE" 2>&1
+    if [ "$NO_LOG_FILE" = true ]; then
+        make
+        make install
+    else
+        make >> "$LOG_FILE" 2>&1
+        make install >> "$LOG_FILE" 2>&1
+    fi
     
     # 清理中间文件
-    make clean >> "$LOG_FILE" 2>&1
+    if [ "$NO_LOG_FILE" = true ]; then
+        make clean
+    else
+        make clean >> "$LOG_FILE" 2>&1
+    fi
     
     echo "Build for $ABI completed. Output in $OUTPUT_DIR/$ABI"
     echo
 }
 
 # 主构建过程
-
 for ABI in "${ABIS[@]}"; do
     build_for_abi "$ABI"
 done
