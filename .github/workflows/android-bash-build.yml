@@ -6,7 +6,7 @@ on:
       API_LEVEL:
         description: 'Select the API Level for the build'
         required: true
-        默认: '28'
+        default: '28'
         type: string
 
 env:
