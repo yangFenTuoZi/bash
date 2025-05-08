@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  API_LEVEL: 28
+  API_LEVEL: 24
   NDK_VERSION: "27.2.12479018"
   ANDROID_BUILD_DIR: "${{ github.workspace }}/android_build"
   NDK_INSTALL_DIR: "${{ github.workspace }}/android-ndk"  # 修改安装目录到工作空间
@@ -54,7 +54,7 @@ jobs:
         API_LEVEL=${{ env.API_LEVEL }} \
         OUTPUT_DIR="${{ env.ANDROID_BUILD_DIR }}/outputs" \
         LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
-        ./build_for_android.sh
+        ./build_for_android.sh --no-log-file
     - name: Package artifacts
       run: |
         cd ${{ env.ANDROID_BUILD_DIR }}
