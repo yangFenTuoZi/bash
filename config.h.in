@@ -972,7 +972,7 @@
 #undef HAVE_DLFCN_H
 
 /* Define if you have the <grp.h> header file.  */
-#undef HAVE_GRP_H
+#define HAVE_GRP_H y
 
 /* Define if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
