@@ -1,14 +1,15 @@
 name: Android Bash Build
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      API_LEVEL:
+        description: 'Select the API Level for the build'
+        required: true
+        默认: '28'
+        type: string
 
 env:
-  API_LEVEL: 24
   NDK_VERSION: "27.2.12479018"
   ANDROID_BUILD_DIR: "${{ github.workspace }}/android_build"
   NDK_INSTALL_DIR: "${{ github.workspace }}/android-ndk"  # 修改安装目录到工作空间
@@ -51,20 +52,20 @@ jobs:
       run: |
         echo "▶️ Building..."
         NDK_HOME=${{ env.NDK_HOME }} \
-        API_LEVEL=${{ env.API_LEVEL }} \
+        API_LEVEL=${{ github.event.inputs.API_LEVEL }} \
         OUTPUT_DIR="${{ env.ANDROID_BUILD_DIR }}/outputs" \
         LOG_DIR="${{ env.ANDROID_BUILD_DIR }}/logs" \
         ./build_for_android.sh --no-log-file
     - name: Package artifacts
       run: |
         cd ${{ env.ANDROID_BUILD_DIR }}
-        tar -czvf android_build-v${{ env.API_LEVEL }}.tar.gz *
+        tar -czvf android_build-v${{ github.event.inputs.API_LEVEL }}.tar.gz *
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: android_build-ndk${{ env.NDK_VERSION }}-api${{ env.API_LEVEL }}
-        path: ${{ env.ANDROID_BUILD_DIR }}/android_build-v${{ env.API_LEVEL }}.tar.gz
+        name: android_build-ndk${{ env.NDK_VERSION }}-api${{ github.event.inputs.API_LEVEL }}
+        path: ${{ env.ANDROID_BUILD_DIR }}/android_build-v${{ github.event.inputs.API_LEVEL }}.tar.gz
 
     - name: Clean workspace
       if: always()
