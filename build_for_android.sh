@@ -123,7 +123,7 @@ build_for_abi() {
     local AR="$TOOLCHAIN/bin/llvm-ar"
     local SYSROOT="$TOOLCHAIN/sysroot"
     
-    export CFLAGS="-D__ANDROID_API__=$API_LEVEL --sysroot=$SYSROOT -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+    export CFLAGS="-D__ANDROID_API__=$API_LEVEL --sysroot=$SYSROOT -Wl,-z,max-page-size=16384"
 
     # 配置
     if [ "$NO_LOG_FILE" = true ]; then
