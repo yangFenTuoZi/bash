@@ -123,7 +123,8 @@ build_for_abi() {
     local AR="$TOOLCHAIN/bin/llvm-ar"
     local SYSROOT="$TOOLCHAIN/sysroot"
     
-    export CFLAGS="-D__ANDROID_API__=$API_LEVEL --sysroot=$SYSROOT -Wl,-z,max-page-size=16384"
+    export CFLAGS="-D__ANDROID_API__=$API_LEVEL --sysroot=$SYSROOT"
+    export LDFLAGS="-Wl,-z,max-page-size=16384"
 
     # 配置
     if [ "$NO_LOG_FILE" = true ]; then
@@ -132,14 +133,16 @@ build_for_abi() {
             --host="$HOST" \
             CC="$CC" \
             AR="$AR" \
-            CFLAGS="$CFLAGS"
+            CFLAGS="$CFLAGS" \
+            LDFLAGS="$LDFLAGS"
     else
         ./configure \
             --prefix="$OUTPUT_DIR/$ABI" \
             --host="$HOST" \
             CC="$CC" \
             AR="$AR" \
-            CFLAGS="$CFLAGS" > "$LOG_FILE" 2>&1
+            CFLAGS="$CFLAGS" \
+            LDFLAGS="$LDFLAGS" > "$LOG_FILE" 2>&1
     fi
 
     # 编译和安装
